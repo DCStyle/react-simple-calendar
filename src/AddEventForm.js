@@ -1,4 +1,3 @@
-import {useState} from "react";
 import {Button, Form} from "react-bootstrap";
 
 const AddEventForm = ({ onAddEvent, onCancel, event = null }) => {
