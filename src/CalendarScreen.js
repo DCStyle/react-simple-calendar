@@ -12,8 +12,8 @@ const hoursOfDay = Array.from({ length: 24 }, (_, i) => i);
 
 // Mock event for demonstration, assuming each event has a unique id and a day/time slot
 const mockEvents = [
-	{ id: 'event-1', day: 'Monday', hour: 10, content: 'Event 1' },
-	{ id: 'event-2', day: 'Tuesday', hour: 10, content: 'Event 2' },
+	{ id: 'event-1', day: 'Monday', hour: 10, minute: 30, content: 'Event 1' },
+	{ id: 'event-2', day: 'Tuesday', hour: 10, minute: 0, content: 'Event 2' },
 	// Add more mock events as needed
 ];
 
@@ -36,23 +36,24 @@ const Calendar = () => {
 			return; // the item didn't move
 		}
 
-		console.log("Before update:", events);
-
-		const start = source.droppableId.split('-'); // ["Monday", "10"]
+		//const start = source.droppableId.split('-'); // ["Monday", "10"]
 		const end = destination.droppableId.split('-'); // ["Tuesday", "11"]
 
 		const newDay = end[0];
 		const newHour = parseInt(end[1], 10);
 
+		// Find the event to move and preserve its minute value
+		const eventToMove = events.find(event => event.id === draggableId);
+		const newMinute = eventToMove ? eventToMove.minute : 0;
+
 		const updatedEvents = events.map(event => {
 			if (event.id === draggableId) {
-				return { ...event, day: newDay, hour: newHour };
+				return { ...event, day: newDay, hour: newHour, minute: newMinute };
 			}
 			return event;
 		});
 
 		setEvents(updatedEvents);
-		console.log("After update:", updatedEvents);
 	};
 
 	const handleAddOrEditEvent = (eventDetails) => {
@@ -61,7 +62,7 @@ const Calendar = () => {
 			setEvents(events.map(event => event.id === editingEvent.id ? eventDetails : event));
 		} else {
 			// Add mode
-			setEvents([...events, eventDetails]);
+			setEvents([...events, {...eventDetails}]);
 		}
 
 		handleCloseModal();

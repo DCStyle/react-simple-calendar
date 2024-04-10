@@ -8,12 +8,13 @@ const AddEventForm = ({ onAddEvent, onCancel, event = null }) => {
 		let formData = new FormData(e.target),
 			day = formData.get('eventDay'),
 			hour = formData.get('eventHour'),
+			minute = formData.get('eventMinute'),
 			content = formData.get('eventContent');
 
 		const eventId = event ? event.id : `event-${Math.random().toString(36).substr(2, 9)}`;
 
 		// Add or edit event
-		onAddEvent({ id: eventId, day, hour: parseInt(hour, 10), content });
+		onAddEvent({ id: eventId, day, hour: parseInt(hour, 10), minute: parseInt(minute, 10), content });
 
 		onCancel(); // Close the modal after submitting
 	};
@@ -43,6 +44,18 @@ const AddEventForm = ({ onAddEvent, onCancel, event = null }) => {
 					defaultValue={event ? event.hour : ''}
 					required
 					placeholder="Hour (0-23)" />
+			</Form.Group>
+
+			<Form.Group className="mb-3" controlId="formMinuteInput">
+				<Form.Label>Minute</Form.Label>
+				<Form.Control
+					name="eventMinute"
+					type="number"
+					min="0"
+					max="59"
+					defaultValue={event ? event.minute : ''}
+					required
+					placeholder="Minute (0-59)" />
 			</Form.Group>
 
 			<Form.Group className="mb-3" controlId="formContentInput">
